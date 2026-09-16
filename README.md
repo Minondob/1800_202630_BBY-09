@@ -68,6 +68,8 @@ elmo-hikes/
 ## Contributors
 - Jonathan Volsky - BCIT CST Student with a passion for programming, rock climbing and gaming / game development. Fun fact: I swim competitively on a national level.
 - Bertha Minondo - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
+- **Bertha Minondo** - BCIT CST Student, I love spending time with my cat and gspending time outdoors hinking and on my motorcycle
+
 
 ---
 
