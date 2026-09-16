@@ -66,10 +66,18 @@ elmo-hikes/
 
 
 ## Contributors
+HEAD
+HEAD
+- **Pratham** - BCIT CST Student with a passion for outdoor adventures and user-friendly applications. Fun fact: Loves solving Rubik's Cubes in under a minute.
+- **Bertha and Jonathan** - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
+
+
 - Jonathan Volsky - BCIT CST Student with a passion for programming, rock climbing and gaming / game development. Fun fact: I swim competitively on a national level.
 - Bertha Minondo - BCIT CST Student, Frontend enthusiast with a knack for creative design. Fun fact: Has a collection of over 50 houseplants.
+develop
 - **Bertha Minondo** - BCIT CST Student, I love spending time with my cat and gspending time outdoors hinking and on my motorcycle
 
+develop
 
 ---
 
