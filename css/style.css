@@ -1,0 +1,16 @@
+:root {
+  --tm-ink: #1f2a37;
+  --tm-paper: #f6f8fb;
+  --tm-blue: #2f5bea;
+  --tm-green: #1f9d6b;
+}
+body { background: var(--tm-paper); color: var(--tm-ink); font-family: "Nunito", system-ui, sans-serif; }
+.phone { max-width: 420px; min-height: 100vh; margin: 0 auto; background: #fff; display: flex; flex-direction: column; box-shadow: 0 0 0 1px #e3e8ef; }
+.phone-header { padding: 1rem 1.25rem; border-bottom: 1px solid #e3e8ef; font-weight: 800; font-size: 1.4rem; }
+.phone-main { flex: 1; padding: 1.5rem 1.25rem; }
+.btn-tm { background: var(--tm-blue); color: #fff; border-radius: 2rem; padding: .7rem 1rem; font-weight: 700; }
+.btn-tm:hover { background: #2448c4; color: #fff; }
+.role-btn { width: 100%; padding: 1rem; border-radius: 2rem; border: 2px solid var(--tm-blue); background: #fff; color: var(--tm-blue); font-weight: 800; font-size: 1.2rem; }
+.role-btn:hover, .role-btn:focus-visible { background: var(--tm-blue); color: #fff; }
+.avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; background: #e3e8ef; border: 3px solid var(--tm-blue); }
+#navbar-placeholder { min-height: 56px; border-top: 1px solid #e3e8ef; }
