@@ -1,6 +1,6 @@
 import { auth, db } from "./firebaseConfig.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const preview = document.getElementById("avatarPreview");
 const errorBox = document.getElementById("error");
