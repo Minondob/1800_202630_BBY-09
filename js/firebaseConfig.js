@@ -1,3 +1,4 @@
+// Shared Firebase setup. Every page imports { auth, db } from here.
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
