@@ -20,6 +20,12 @@
         <legend class="fs-6 fw-bold">Select profile username:</legend>
         <div id="usernameOptions"></div>
       </fieldset>
+      <!-- NEW: tutors only (shown by profile.js) -->
+      <div id="subjectBlock" class="mb-4 d-none">
+        <label class="form-label fw-bold" for="subjectSelect">Subject you teach</label>
+        <select id="subjectSelect" class="form-select"></select>
+        <input id="subjectOther" class="form-control mt-2 d-none" maxlength="40" placeholder="Type your subject">
+      </div>
       <label class="form-label fw-bold" for="bio" id="bioLabel">Profile details</label>
       <textarea id="bio" class="form-control mb-4" rows="4" placeholder="Write something about yourself and your education level"></textarea>
       <button id="saveBtn" type="button" class="btn btn-tm w-100">Save</button>

@@ -1,0 +1,12 @@
+.tutor-card { background: #d9dde2; padding: .9rem .5rem; text-align: center; border-radius: .4rem; height: 100%; }
+.tutor-card .avatar { width: 88px; height: 88px; border: 0; }
+.tutor-card h2 { font-size: .95rem; font-weight: 800; margin: .6rem 0 .1rem; }
+.tutor-card p { font-size: .85rem; margin-bottom: .6rem; }
+.btn-pill { background: #2f5bea; color: var(--tm-ink); border-radius: 2rem; font-weight: 700; padding: .4rem 1rem; }
+.btn-pill:hover { background: #2448c4; color: var(--tm-ink); }
+.profile-hero { position: relative; }
+.profile-hero::before { content: ""; position: absolute; left: -1.25rem; right: -1.25rem; top: 50%; border-top: 4px solid #000; }
+.profile-hero .avatar { position: relative; width: 160px; height: 160px; border: 0; }
+.bio-box { background: #d9dde2; border-radius: .5rem; padding: .8rem; text-align: left; }
+.subject-chip { display: inline-block; background: #d9dde2; border-radius: .5rem; padding: .4rem 2rem; font-weight: 700; }
+.stars i { color: #12353a; font-size: 1.5rem; margin: 0 .1rem; }
