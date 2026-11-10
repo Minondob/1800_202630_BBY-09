@@ -12,6 +12,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   const password = document.getElementById("loginPassword").value;
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    location.href = "search.html";
   } catch (error) {
     statusMsg.textContent = "Login failed: " + error.code;
   }

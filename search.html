@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Find a Tutor</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<html lang="en"><head><title>Tutor Match - Find a tutor</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet"></head>
 <body>
-  <nav class="navbar bg-body-secondary">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold" href="#">Tutor Match</a>
+<div class="phone">
+  <header class="phone-header">Tutor Match</header>
+  <main class="phone-main">
+    <div class="search-row">
+      <label class="search-box">
+        <span class="visually-hidden">Search tutors</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="searchInput" type="search" placeholder="Search by name or subject" autocomplete="off">
+      </label>
+      <a id="filterBtn" href="filter.html" class="btn-filter">Filter<span id="filterBadge" class="badge-count d-none"></span></a>
     </div>
-  </nav>
-
-  <div class="container my-4">
-    <h1 class="h3 mb-4">Find a Tutor</h1>
-    <button type="button" id="seedBtn" class="btn btn-warning mb-3">sample tutors</button>
-    <div class="row" id="tutorList"></div>
-  </div>
-
-  <script type="module" src="/src/tutors.js"></script>
-</body>
-</html>
+    <div id="activeFilters" class="active-filters d-none"></div>
+    <p id="resultsCount" class="results-count">Loading tutors...</p>
+    <div id="tutorList"></div>
+  </main>
+  <div id="navbar-placeholder"></div>
+</div>
+<script type="module" src="/js/tutors.js"></script>
+<script type="module" src="/js/navbar.js"></script>
+</body></html>
