@@ -2,8 +2,10 @@ import { auth, db } from "./firebaseConfig.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
-const role = sessionStorage.getItem("role");
-if (!role) location.href = "index.html"; // skipped the role page
+// TESTING FALLBACK: DEFAULTS TO STUDENT SO signup.html OPENS DIRECTLY. FOR FINAL, DELETE THE '|| "student"' PART.
+const role = sessionStorage.getItem("role") || "student";
+// FINAL: UNCOMMENT THE NEXT LINE TO SEND PEOPLE WHO SKIPPED THE ROLE PAGE BACK TO IT (main.html IS YOUR ROLE PAGE).
+// if (!role) location.href = "main.html";
 
 const label = role === "tutor" ? "Tutor" : "Student";
 document.getElementById("heading").textContent = `${label} account set-up:`;
