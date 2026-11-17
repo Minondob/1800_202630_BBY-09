@@ -28,7 +28,7 @@ function resizeImage(file) {
 onAuthStateChanged(auth, async (user) => {
   // FINAL: UNCOMMENT THE NEXT LINE TO SEND LOGGED-OUT USERS TO THE LOGIN PAGE, AND DELETE THE "TESTING ONLY" LINE UNDER IT.
   // if (!user) return (location.href = "login.html");
-  if (!user) return; // TESTING ONLY: STOPS WITHOUT REDIRECTING
+  if (!user) return (location.href = "login.html"); 
 
   const ref = doc(db, "users", user.uid);
   const data = (await getDoc(ref)).data();

@@ -1,9 +1,10 @@
-import { auth } from "./firebaseConfig.js";
+import { auth, db } from "./firebaseConfig.js";
 import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const statusMsg = document.getElementById("statusMsg");
 
@@ -11,8 +12,9 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    location.href = "search.html";
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const snap = await getDoc(doc(db, "users", cred.user.uid));
+    location.href = snap.data()?.role === "tutor" ? "inbox.html" : "search.html";
   } catch (error) {
     statusMsg.textContent = "Login failed: " + error.code;
   }

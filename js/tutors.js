@@ -1,48 +1,29 @@
 import { db } from "./firebaseConfig.js";
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 
-const tutors = [
-  { tutor_id: "tutor_001", first_name: "Maya", last_name: "Chen",
-    subjects: ["Calculus II", "Linear Algebra"], subject_category: "Math",
-    age_groups: ["College"], distance_km: 2, hourly_rate: 25,
-    rating_average: 4.8, bio: "Math grad student.", profile_photo_url: "" },
-  { tutor_id: "tutor_002", first_name: "Sam", last_name: "Patel",
-    subjects: ["Chemistry", "Biology"], subject_category: "Science",
-    age_groups: ["High school", "College"], distance_km: 5, hourly_rate: 20,
-    rating_average: 4.5, bio: "Science peer tutor.", profile_photo_url: "" },
-  { tutor_id: "tutor_003", first_name: "Lena", last_name: "Okafor",
-    subjects: ["Physics"], subject_category: "Science",
-    age_groups: ["High school"], distance_km: 8, hourly_rate: 30,
-    rating_average: 4.9, bio: "High-school teacher.", profile_photo_url: "" },
-  { tutor_id: "tutor_004", first_name: "Alex", last_name: "Morgan",
-    subjects: ["Algebra", "Geometry"], subject_category: "Math",
-    age_groups: ["Elementary", "High school"], distance_km: 3, hourly_rate: 18,
-    rating_average: 4.6, bio: "Patient math tutor for younger students.", profile_photo_url: "" },
-  { tutor_id: "tutor_005", first_name: "Mark", last_name: "Singh",
-    subjects: ["Pre-Calculus"], subject_category: "Math",
-    age_groups: ["High school"], distance_km: 12, hourly_rate: 30,
-    rating_average: 4.7, bio: "Helps with exam prep.", profile_photo_url: "" },
-  { tutor_id: "tutor_006", first_name: "Bob", last_name: "Lee",
-    subjects: ["World History", "Geography"], subject_category: "Social Studies",
-    age_groups: ["High school", "College"], distance_km: 15, hourly_rate: 22,
-    rating_average: 4.3, bio: "History major.", profile_photo_url: "" },
-  { tutor_id: "tutor_007", first_name: "Priya", last_name: "Nair",
-    subjects: ["French", "Spanish"], subject_category: "Language Arts",
-    age_groups: ["Elementary", "High school"], distance_km: 6, hourly_rate: 28,
-    rating_average: 4.8, bio: "Language teacher.", profile_photo_url: "" },
-  { tutor_id: "tutor_008", first_name: "Chris", last_name: "Karth",
-    subjects: ["English Literature", "Essay Writing"], subject_category: "English",
-    age_groups: ["High school"], distance_km: 20, hourly_rate: 35,
-    rating_average: 4.4, bio: "12 years teaching English.", profile_photo_url: "" },
-  { tutor_id: "tutor_009", first_name: "Jenna", last_name: "Park",
-    subjects: ["Reading", "Phonics"], subject_category: "English",
-    age_groups: ["Elementary"], distance_km: 4, hourly_rate: 15,
-    rating_average: 4.9, bio: "Early reading specialist.", profile_photo_url: "" },
-  { tutor_id: "tutor_010", first_name: "Omar", last_name: "Haddad",
-    subjects: ["Economics", "Politics"], subject_category: "Social Studies",
-    age_groups: ["College"], distance_km: 30, hourly_rate: 45,
-    rating_average: 4.6, bio: "Economics grad student.", profile_photo_url: "" }
+// ---- Sample tutors, saved in the "users" collection like real tutors ----
+// Run once: open search.html?seed=1
+const sampleTutors = [
+  { id: "tutor_001", firstName: "Maya", lastName: "Chen", subject: "Calculus", hourlyRate: 25, rating: 4.8, ageGroups: ["College"], distanceKm: 2, bio: "Math grad student." },
+  { id: "tutor_002", firstName: "Sam", lastName: "Patel", subject: "Chemistry", hourlyRate: 20, rating: 4.5, ageGroups: ["High school", "College"], distanceKm: 5, bio: "Science peer tutor." },
+  { id: "tutor_003", firstName: "Lena", lastName: "Okafor", subject: "Physics", hourlyRate: 30, rating: 4.9, ageGroups: ["High school"], distanceKm: 8, bio: "High-school teacher." },
+  { id: "tutor_004", firstName: "Alex", lastName: "Morgan", subject: "Mathematics", hourlyRate: 18, rating: 4.6, ageGroups: ["Elementary", "High school"], distanceKm: 3, bio: "Patient math tutor for younger students." },
+  { id: "tutor_005", firstName: "Mark", lastName: "Singh", subject: "Statistics", hourlyRate: 30, rating: 4.7, ageGroups: ["College"], distanceKm: 12, bio: "Helps with exam prep." },
+  { id: "tutor_006", firstName: "Bob", lastName: "Lee", subject: "History", hourlyRate: 22, rating: 4.3, ageGroups: ["High school", "College"], distanceKm: 15, bio: "History major." },
+  { id: "tutor_007", firstName: "Priya", lastName: "Nair", subject: "French", hourlyRate: 28, rating: 4.8, ageGroups: ["Elementary", "High school"], distanceKm: 6, bio: "Language teacher." },
+  { id: "tutor_008", firstName: "Chris", lastName: "Karth", subject: "English", hourlyRate: 35, rating: 4.4, ageGroups: ["High school"], distanceKm: 20, bio: "12 years teaching English." },
+  { id: "tutor_009", firstName: "Jenna", lastName: "Park", subject: "English", hourlyRate: 15, rating: 4.9, ageGroups: ["Elementary"], distanceKm: 4, bio: "Early reading specialist." },
+  { id: "tutor_010", firstName: "Omar", lastName: "Haddad", subject: "Economics", hourlyRate: 45, rating: 4.6, ageGroups: ["College"], distanceKm: 30, bio: "Economics grad student." }
 ];
+
+// The filter page has 5 groups. Tutors pick a subject from the longer list in subjects.js.
+const CATEGORY = {
+  Mathematics: "Math", Calculus: "Math", Statistics: "Math",
+  Physics: "Science", Chemistry: "Science", Biology: "Science",
+  English: "English",
+  French: "Language Arts", Spanish: "Language Arts", Mandarin: "Language Arts",
+  History: "Social Studies", Geography: "Social Studies", Economics: "Social Studies", Psychology: "Social Studies"
+};
 
 // ---- Filters come from the URL (search.html?subject=Math&max=50) ----
 const params = new URLSearchParams(location.search);
@@ -55,19 +36,22 @@ const list = document.getElementById("tutorList");
 const searchInput = document.getElementById("searchInput");
 let allTutors = [];
 
-// true if the tutor passes every filter that was chosen
+// A missing field (a real tutor who has no distance yet) never blocks a tutor.
 function matches(t) {
-  if (subjects.length && !subjects.includes(t.subject_category)) return false;
-  if (ages.length && !ages.some((a) => t.age_groups?.includes(a))) return false;
-  if (maxPrice && t.hourly_rate > maxPrice) return false;
-  if (maxDist && (t.distance_km ?? Infinity) > maxDist) return false;
+  if (subjects.length && !subjects.includes(CATEGORY[t.subject])) return false;
+  if (ages.length && t.ageGroups && !ages.some((a) => t.ageGroups.includes(a))) return false;
+  if (maxPrice && t.hourlyRate > maxPrice) return false;
+  if (maxDist && t.distanceKm > maxDist) return false;
   return true;
 }
 
-// true if the search box text appears in the tutor's name or subjects
+function nameOf(t) {
+  return t.username || `${t.firstName} ${t.lastName}`;
+}
+
+// true if the search box text appears in the tutor's name or subject
 function matchesText(t, text) {
-  if (!text) return true;
-  return `${t.first_name} ${t.last_name} ${t.subjects.join(" ")}`.toLowerCase().includes(text);
+  return `${nameOf(t)} ${t.subject}`.toLowerCase().includes(text);
 }
 
 // Stops text from running as HTML.
@@ -79,29 +63,27 @@ function esc(text) {
 
 // Photo if the tutor has one, otherwise a coloured circle with their initials.
 function avatarHtml(t) {
-  if (t.profile_photo_url) {
-    return `<div class="tutor-avatar"><img src="${esc(t.profile_photo_url)}" alt=""></div>`;
-  }
-  const initials = (t.first_name[0] + t.last_name[0]).toUpperCase();
-  const colour = [...(t.first_name + t.last_name)].reduce((sum, c) => sum + c.charCodeAt(0), 0) % 5;
+  if (t.avatar) return `<div class="tutor-avatar"><img src="${esc(t.avatar)}" alt=""></div>`;
+  const initials = (t.firstName[0] + t.lastName[0]).toUpperCase();
+  const colour = [...nameOf(t)].reduce((sum, c) => sum + c.charCodeAt(0), 0) % 5;
   return `<div class="tutor-avatar av-${colour}" aria-hidden="true">${esc(initials)}</div>`;
 }
 
 function cardHtml(t) {
-  const tags = t.subjects.slice(0, 3).map((s) => `<span class="tag">${esc(s)}</span>`).join("");
-  const dist = t.distance_km != null ? `${t.distance_km} km away` : "";
+  const rating = t.rating
+    ? `<span class="tutor-rating"><span class="star" aria-hidden="true">&#9733;</span> ${Number(t.rating).toFixed(1)}</span>`
+    : "";
+  const price = t.hourlyRate ? `$${t.hourlyRate}/hr` : "";
+  const dist = t.distanceKm ? `${t.distanceKm} km away` : "";
   return `
-    <article class="tutor-card">
+    <a class="tutor-card" href="viewprofile.html?id=${encodeURIComponent(t.id)}">
       ${avatarHtml(t)}
       <div class="tutor-info">
-        <div class="tutor-top">
-          <h2 class="tutor-name">${esc(t.first_name)} ${esc(t.last_name[0])}.</h2>
-          <span class="tutor-rating"><span class="star" aria-hidden="true">&#9733;</span> ${Number(t.rating_average).toFixed(1)}</span>
-        </div>
-        <div class="tutor-tags">${tags}</div>
-        <div class="tutor-meta"><span class="tutor-price">$${t.hourly_rate}/hr</span><span>${dist}</span></div>
+        <div class="tutor-top"><h2 class="tutor-name">${esc(nameOf(t))}</h2>${rating}</div>
+        <div class="tutor-tags"><span class="tag">${esc(t.subject)}</span></div>
+        <div class="tutor-meta"><span class="tutor-price">${price}</span><span>${dist}</span></div>
       </div>
-    </article>`;
+    </a>`;
 }
 
 // "Math" "High school" "under $50/hr" "within 10 km" shown above the results
@@ -131,10 +113,13 @@ function render() {
     : `<p class="empty-state">No tutors match. Try a different search or <a href="filter.html">change the filters</a>.</p>`;
 }
 
+// Real tutors = users with role "tutor" and a finished profile
 async function loadTutors() {
   try {
-    const snap = await getDocs(collection(db, "tutors"));
-    allTutors = snap.docs.map((d) => d.data());
+    const snap = await getDocs(query(collection(db, "users"), where("role", "==", "tutor")));
+    allTutors = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .filter((t) => t.profileComplete && t.subject);
     render();
   } catch (error) {
     console.error(error);
@@ -143,10 +128,14 @@ async function loadTutors() {
   }
 }
 
-// One-time setup: open search.html?seed=1 to write the sample tutors to Firestore.
 async function seedTutors() {
-  for (const t of tutors) {
-    await setDoc(doc(db, "tutors", t.tutor_id), t);
+  for (const { id, ...tutor } of sampleTutors) {
+    await setDoc(doc(db, "users", id), {
+      ...tutor,
+      username: `${tutor.firstName} ${tutor.lastName}`,
+      role: "tutor",
+      profileComplete: true
+    });
   }
 }
 
