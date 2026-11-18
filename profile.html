@@ -1,52 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Jerry Crawford - TutorMatch</title>
-
-         <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-    </head>
-
-    <body class="bg-light">
-
-        <header class=" container py-3">
-
-            <a href="tutor_card.html" class="text-dark">Back to Tutors</a>
-        <h1 class="text-center mt-3">TutorMatch</h1>
-        </header>
-
-<main class="container text-center">
-
-    <img
-    src="https://cdn.phototourl.com/member/2026-10-20-9505950d-49dc-4738-911a-cbb4e46b485f.jpg"
-    alt="Jerry Crawford"
-    width="120"
-    height="120"
-    class="rounded-circle mb-3"
-    >
-
-<h2>Jerry Crawford</h2>
-<h3 class="h5 mt-4">About Me</h3>
-<p>Hi there, I am <b> Jerry Crawford</b>, a high school chemistry teacher with 7 years of experience</p>
-
-<h3 class="h5 mt-4">Subject</h3>
-<p><b>Chemistry</b></p>
-
-<button id="tm-message-tutor" class="btn btn-secondary rounded-pill me-2 text-center" >
-    Message Tutor
-</button>
-
-<button id="tm-book-session" class="btn btn-secondary rounded-pill me-2 text-center">
-    Book a session
-</button>
-
- </main>
-
-    <script src="jerry-profile.js"></script>
-
-    </body>
-</html>
+<html lang="en"><head><title>Tutor Match - Set up profile</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet"></head>
+<body>
+<div class="phone">
+  <header class="phone-header">Tutor Match</header>
+  <main class="phone-main">
+    <section id="profileSection">
+      <h1 class="h4 mb-4" id="heading">Set up your profile</h1>
+      <div id="error" class="alert alert-danger d-none" role="alert"></div>
+      <div class="text-center mb-4">
+        <img id="avatarPreview" class="avatar mb-3" alt="Your avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E">
+        <input id="avatarInput" type="file" accept="image/*" class="d-none">
+        <div><button id="avatarBtn" type="button" class="btn btn-outline-primary rounded-pill">Select avatar</button></div>
+      </div>
+      <fieldset class="mb-4">
+        <legend class="fs-6 fw-bold">Select profile username:</legend>
+        <div id="usernameOptions"></div>
+      </fieldset>
+      <!-- NEW: tutors only (shown by profile.js) -->
+      <div id="subjectBlock" class="mb-4 d-none">
+        <label class="form-label fw-bold" for="subjectSelect">Subject you teach</label>
+        <select id="subjectSelect" class="form-select"></select>
+        <input id="subjectOther" class="form-control mt-2 d-none" maxlength="40" placeholder="Type your subject">
+      </div>
+      <label class="form-label fw-bold" for="bio" id="bioLabel">Profile details</label>
+      <textarea id="bio" class="form-control mb-4" rows="4" placeholder="Write something about yourself and your education level"></textarea>
+      <button id="saveBtn" type="button" class="btn btn-tm w-100">Save</button>
+    </section>
+    <section id="thanks" class="text-center d-none pt-5">
+      <h1 class="h3">Thank you for signing up!</h1>
+      <p class="text-secondary">Your profile is saved.</p>
+    </section>
+  </main>
+  <div id="navbar-placeholder"></div>
+</div>
+<script type="module" src="js/profile.js"></script>
+</body></html>
