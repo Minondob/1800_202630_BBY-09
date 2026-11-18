@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TutorMatch - Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar bg-body-secondary">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="main.html">TutorMatch</a>
+        <button id="logoutButton" class="btn btn-outline-danger">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Welcome Section -->
+    <main class="container py-5">
+      <div class="p-5 mb-4 bg-white rounded-3">
+        <h1 class="display-5 fw-bold">
+          Welcome, <span id="name-goes-here">Student</span>!
+        </h1>
+        <p class="fs-5">
+          Find the right tutor and make your learning journey easier.
+        </p>
+        <a href="tutor_card.html" class="btn btn-primary btn-lg">
+          Browse Tutors
+        </a>
+      </div>
+
+      <!-- Student Options -->
+      <h2 class="mb-3">Your Dashboard</h2>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="bi bi-person-circle fs-2"></i>
+              <h5 class="card-title mt-2">My Profile</h5>
+              <p class="card-text">View and manage your student information.</p>
+              <a href="student-profile.html" class="btn btn-outline-primary">View Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <i class="bi bi-calendar-check fs-2"></i>
+              <h5 class="card-title mt-2">Book a Session</h5>
+              <p class="card-text">Find a tutor and request a learning session.</p>
+              <a href="tutor_card.html" class="btn btn-outline-primary">Find a Tutor</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Previous Booking Requests -->
+      <section class="mt-5">
+        <h2 class="mb-3">My Booking Requests</h2>
+        <div id="past-requests">
+          <p>Loading your booking requests...</p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

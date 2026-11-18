@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TutorMatch - Card Details</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            background-color: #F5F7FB;
+            padding-bottom: 80px;
+        }
+
+        .navbar {
+            background-color: #242E70;
+            color: white;
+        }
+
+        .navbar a,
+        .navbar-brand {
+            color: white;
+            text-decoration: none;
+        }
+
+        .card-container {
+            max-width: 550px;
+        }
+
+        .brand-blue {
+            color: #242E70;
+        }
+
+        .card-form {
+            background: white;
+            border: 1px solid #E3E8F2;
+            border-radius: 12px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: #4D5FF0;
+            box-shadow: 0 0 0 0.2rem rgba(77, 95, 240, 0.15);
+        }
+
+        .btn-primary {
+            background-color: #4D5FF0;
+            border-color: #4D5FF0;
+            padding: 12px;
+        }
+
+        .bottom-nav {
+            background-color: #E5E5E5;
+            border-top: 1px solid #D5D5D5;
+        }
+
+        .bottom-nav button {
+            color: #4D5FF0;
+            background: none;
+            border: none;
+            font-size: 12px;
+            padding: 0;
+        }
+
+        .bottom-nav i {
+            font-size: 23px;
+            color: #0c1ea8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+    <nav class="navbar py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a aria-label="Menu">
+                <i class="bi bi-list fs-3"></i>
+            </a>
+
+            <span class="navbar-brand fw-bold mb-0">Tutor Match</span>
+
+            <a aria-label="Settings">
+                <i class="bi bi-gear fs-4"></i>
+            </a>
+
+        </div>
+    </nav>
+
+    <!-- Card Details -->
+    <main class="container card-container py-5">
+
+        <h2 class="fw-bold brand-blue">Card Details</h2>
+
+        <p class="text-secondary">
+            Enter your card information to continue.
+        </p>
+
+        <div class="card-form p-4">
+
+            <form id="cardDetailsForm">
+
+                <!-- Cardholder Name -->
+                <div class="mb-3">
+                    <label for="cardholderName" class="form-label fw-semibold">
+                        Cardholder Name
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           id="cardholderName"
+                           placeholder="Name on card">
+                </div>
+
+                <!-- Card Number -->
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label fw-semibold">
+                        Card Number
+                    </label>
+
+                    <div class="input-group">
+
+                        <input type="text"
+                               class="form-control"
+                               id="cardNumber"
+                               placeholder="16-digit card number"
+                               inputmode="numeric"
+                               autocomplete="off">
+
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-credit-card brand-blue"></i>
+                        </span>
+
+                    </div>
+                </div>
+
+                <!-- Expiry Date and CVC -->
+                <div class="row">
+
+                    <div class="col-6 mb-3">
+                        <label for="expiryDate" class="form-label fw-semibold">
+                            Expiry Date
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="expiryDate"
+                               placeholder="MM/YY"
+                               maxlength="5">
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label for="cvc" class="form-label fw-semibold">
+                            CVC
+                        </label>
+
+                        <input type="password"
+                               class="form-control"
+                               id="cvc"
+                               placeholder="3 or 4 digits"
+                               maxlength="4"
+                               inputmode="numeric">
+                    </div>
+
+                </div>
+
+                <!-- Security Information -->
+                <p class="text-secondary small mb-4">
+                    <i class="bi bi-lock-fill me-1"></i>
+                    Your payment information should be handled securely.
+                </p>
+
+                <!-- Continue Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Continue
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+
+    <!-- Bottom Navbar -->
+    <nav class="bottom-nav fixed-bottom py-2">
+        <div class="container d-flex justify-content-around">
+
+            <button type="button">
+                <i class="bi bi-person d-block"></i>
+                Profile
+            </button>
+
+            <button type="button">
+                <i class="bi bi-calendar3 d-block"></i>
+                Calendar
+            </button>
+
+            <button type="button">
+                <i class="bi bi-chat-left-text-fill d-block"></i>
+                Messages
+            </button>
+
+            <button type="button">
+                <i class="bi bi-house-door d-block"></i>
+                Home
+            </button>
+
+        </div>
+    </nav>
+
+    <!-- JavaScript -->
+    <script type="module" src="/src/card-details.js"></script>
+
+</body>
+</html>
