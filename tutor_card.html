@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TutorMatch - Tutors</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        body {
+            background-color: #F5F7FB;
+            padding-bottom: 75px;
+        }
+
+        /* Top Navbar */
+        .top-navbar {
+            background-color: #242E70;
+        }
+
+        .top-navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .top-navbar i {
+            font-size: 26px;
+            color: white;
+        }
+
+        .top-navbar h1 {
+            color: white;
+        }
+
+        /* Search Bar */
+        #tm-search {
+            border-radius: 8px;
+        }
+
+        /* Tutor Cards */
+        .tm-card {
+            border: 1px solid #E3E8F2;
+            border-radius: 12px;
+            background-color: white;
+        }
+
+        .tm-name {
+            color: #242E70;
+            font-weight: bold;
+        }
+
+        /* Bottom Navbar */
+        .bottom-nav {
+            background-color: #E5E5E5;
+            border-top: 1px solid #D5D5D5;
+        }
+
+        .bottom-nav .nav-item {
+            color: #4D5FF0;
+            font-size: 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .bottom-nav i {
+            font-size: 23px;
+            color: #4D5FF0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+    <header class="top-navbar py-3">
+
+        <div class="container">
+
+            <nav class="d-flex justify-content-between align-items-center">
+
+                <!-- Menu Icon -->
+                <a aria-label="Menu">
+                    <i class="bi bi-list"></i>
+                </a>
+
+                <!-- Website Name -->
+                <h1 class="h3 mb-0">
+                    <b>Tutor Match</b>
+                </h1>
+
+                <!-- Settings Icon -->
+                <a aria-label="Settings">
+                    <i class="bi bi-gear "></i>
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- Search Bar -->
+    <section class="container my-4">
+
+        <div class="input-group">
+
+            <span class="input-group-text bg-light border-0">
+                <i class="bi bi-search"></i>
+            </span>
+
+            <input
+                type="search"
+                class="form-control bg-light border-0"
+                id="tm-search"
+                placeholder="Search by Subject, Tutors, Price..."
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- Tutors Section -->
+    <main class="container tm-tutors py-3">
+
+        <div class="row g-1">
+
+            <!-- Tutor 1 -->
+            <div class="col-6">
+
+                <div class="tm-card card h-100 text-center py-2">
+
+                    <img
+                        src="https://cdn.phototourl.com/member/2026-10-20-b7beafba-cc94-4a4f-8b06-ec4381091b25.jpg"
+                        class="rounded-circle mx-auto mb-2"
+                        width="100"
+                        height="100"
+                        alt="Alex Hogfield"
+                    >
+
+                    <div class="card-body p-1">
+
+                        <h2 class="tm-name h6">
+                            Alex Hogfield
+                        </h2>
+
+                        <p class="small mb-2">
+                            Math <br> Physics
+                        </p>
+
+                        <a href="profile copy 2.html"
+                           class="btn btn-secondary btn-sm rounded-pill">
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Tutor 2 -->
+            <div class="col-6">
+
+                <div class="tm-card card h-100 text-center p-2">
+
+                    <img
+                        src="https://cdn.phototourl.com/member/2026-10-20-9505950d-49dc-4738-911a-cbb4e46b485f.jpg"
+                        class="rounded-circle mx-auto mb-1"
+                        width="100"
+                        height="100"
+                        alt="Jerry Crawford"
+                    >
+
+                    <div class="card-body p-1">
+
+                        <h2 class="tm-name h6">
+                            Jerry Crawford
+                        </h2>
+
+                        <p class="small mb-2">
+                            Chemistry
+                        </p>
+
+                        <a href="profile.html"
+                           id="tm-jerry-profile"
+                           class="btn btn-secondary btn-sm rounded-pill">
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Tutor 3 -->
+            <div class="col-6">
+
+                <div class="tm-card card h-100 text-center p-2">
+
+                    <img
+                        src="https://cdn.phototourl.com/member/2026-10-20-9229a151-4dd4-4587-8bfc-0b7b3d2bfe46.jpg"
+                        class="rounded-circle mx-auto mt-1"
+                        width="100"
+                        height="100"
+                        alt="Chris Karth"
+                    >
+
+                    <div class="card-body p-2">
+
+                        <h2 class="tm-name h6">
+                            Chris Karth
+                        </h2>
+
+                        <p class="small mb-2">
+                            English
+                        </p>
+
+                        <a href="profile copy 3.html"
+                           class="btn btn-secondary btn-sm rounded-pill">
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Tutor 4 -->
+            <div class="col-6">
+
+                <div class="tm-card card h-100 text-center p-2">
+
+                    <img
+                        src="https://cdn.phototourl.com/member/2026-10-20-c7fd7e72-3c77-498f-a143-5aede12910ac.jpg"
+                        class="rounded-circle mx-auto mt-1"
+                        width="100"
+                        height="100"
+                        alt="Bryan Travis"
+                    >
+
+                    <div class="card-body p-2">
+
+                        <h2 class="tm-name h6">
+                            Bryan Travis
+                        </h2>
+
+                        <p class="small mb-2">
+                            Biology
+                        </p>
+
+                        <a href="profile.html"
+                           class="btn btn-secondary btn-sm rounded-pill">
+                            View Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Bottom Navbar -->
+    <nav class="bottom-nav fixed-bottom py-2">
+
+        <div class="container d-flex justify-content-around align-items-center">
+
+            <!-- Profile -->
+            <button type="button" class="nav-item">
+                <i class="bi bi-person d-block"></i>
+                Profile
+            </button>
+
+            <!-- Calendar -->
+            <button type="button" class="nav-item">
+                <i class="bi bi-calendar3 d-block"></i>
+                Calendar
+            </button>
+
+            <!-- Messages -->
+            <button type="button" class="nav-item">
+                <i class="bi bi-chat-left-text-fill d-block"></i>
+                Messages
+            </button>
+
+            <!-- Home -->
+            <button type="button" class="nav-item">
+                <i class="bi bi-house-door d-block"></i>
+                Home
+            </button>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Tutors JavaScript -->
+    <script src="tutors.js"></script>
+
+</body>
+
+</html>

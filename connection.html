@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Connect with Tutor | TutorMatch</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .connection-container {
+            max-width: 650px;
+            margin: 80px auto;
+            padding: 20px;
+        }
+
+        .connection-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .success-icon {
+            font-size: 65px;
+            color: #198754;
+        }
+
+        .connection-option {
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 25px;
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .connection-option:hover {
+            border-color: #0d6efd;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .option-icon {
+            font-size: 40px;
+            color: #0d6efd;
+        }
+
+        .connect-btn {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container connection-container">
+
+        <div class="connection-card text-center">
+
+            <!-- Booking Accepted Message -->
+            <div class="mb-3">
+                <i class="bi bi-check-circle-fill success-icon"></i>
+            </div>
+
+            <h2 class="fw-bold mb-3">Booking Request Accepted!</h2>
+
+            <p class="text-muted mb-4">
+                Your booking request has been accepted.
+                You can now choose how you would like to connect
+                for your tutoring session.
+            </p>
+
+            <hr class="my-4">
+
+            <h4 class="fw-semibold mb-4">
+                Choose Your Connection Method
+            </h4>
+
+            <div class="row g-3">
+
+                <!-- Zoom Option -->
+                <div class="col-md-6">
+
+                    <div class="connection-option">
+
+                        <i class="bi bi-camera-video-fill option-icon"></i>
+
+                        <h5 class="fw-bold mt-3">Zoom Meeting</h5>
+
+                        <p class="text-muted small">
+                            Join your tutoring session through Zoom.
+                        </p>
+
+                        <button class="btn btn-primary connect-btn"
+                            id="zoomBtn" disabled>
+                            <i class="bi bi-camera-video"></i>
+                            Join Zoom
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- Phone Call Option -->
+                <div class="col-md-6">
+
+                    <div class="connection-option">
+
+                        <i class="bi bi-telephone-fill option-icon"></i>
+
+                        <h5 class="fw-bold mt-3">Phone Call</h5>
+
+                        <p class="text-muted small">
+                            Connect with your tutor through a phone call.
+                        </p>
+
+                        <button class="btn btn-outline-primary connect-btn"
+                            id="callBtn" disabled>
+                            <i class="bi bi-telephone"></i>
+                            Start Call
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Information -->
+            <div class="alert alert-info mt-4 mb-0">
+
+                <i class="bi bi-info-circle"></i>
+
+                Connection details will become available
+                once they have been provided for your session.
+
+            </div>
+
+        </div>
+
+        <p class="text-center text-muted mt-4 small">
+            © 2026 TutorMatch. All rights reserved.
+        </p>
+
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+</html>
