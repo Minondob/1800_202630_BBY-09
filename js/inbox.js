@@ -1,160 +1,71 @@
+import { auth, db } from "./firebaseConfig.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, doc, updateDoc, query, where } from "firebase/firestore";
 
-import { db } from "./firebaseConfig.js";
-import {
-    collection,
-    getDocs,
-    doc,
-    updateDoc,
-    query,
-    where
-} from "firebase/firestore";
+const list = document.getElementById("booking-requests");
+const messageBox = document.getElementById("inbox-message");
+let tutorUid = null;
 
-// Get the page elements
-const bookingRequests = document.getElementById("booking-requests");
-const inboxMessage = document.getElementById("inbox-message");
-
-// Display messages
-function showMessage(message, type) {
-    inboxMessage.textContent = message;
-    inboxMessage.className = `alert alert-${type}`;
+function showMessage(text, type) {
+  messageBox.textContent = text;
+  messageBox.className = `alert alert-${type}`;
 }
 
-// Load pending booking requests from Firestore
-async function loadBookingRequests() {
-
-    try {
-
-        // Get the booking requests collection
-        const bookingRef = collection(db, "bookingRequests");
-
-        // Find requests with Pending status
-        const q = query(
-            bookingRef,
-            where("status", "==", "Pending")
-        );
-
-        // Get the matching documents
-        const querySnapshot = await getDocs(q);
-
-        // Clear the previous requests
-        bookingRequests.innerHTML = "";
-
-        // Check if there are any pending requests
-        if (querySnapshot.empty) {
-            bookingRequests.textContent = "No new booking requests.";
-            return;
-        }
-
-        // Display each booking request
-        querySnapshot.forEach((bookingDoc) => {
-
-            const booking = bookingDoc.data();
-
-            // Create a card for the request
-            const card = document.createElement("div");
-            card.className = "request-card";
-
-            // Display student name
-            const name = document.createElement("h4");
-            name.className = "request-name";
-            name.textContent = booking.studentName || "Student";
-
-            // Create the details section
-            const details = document.createElement("div");
-            details.className = "request-details";
-
-            // Display student email
-            const email = document.createElement("p");
-            email.textContent = `Email: ${booking.email || "Not provided"}`;
-
-            // Display education level
-            const education = document.createElement("p");
-            education.textContent = `Education: ${booking.education || "Not provided"}`;
-
-            // Display learning requirements
-            const info = document.createElement("p");
-            info.textContent = `Learning Requirements: ${booking.studentInfo || "Not provided"}`;
-
-            // Display requested date
-            const date = document.createElement("p");
-            date.textContent = `Requested Date: ${booking.date || "Not provided"}`;
-
-            // Add details to the section
-            details.appendChild(email);
-            details.appendChild(education);
-            details.appendChild(info);
-            details.appendChild(date);
-
-            // Create Accept button
-            const acceptButton = document.createElement("button");
-            acceptButton.textContent = "Accept";
-            acceptButton.className = "tm-button accept-button me-2";
-
-            acceptButton.addEventListener("click", function () {
-                updateBookingStatus(bookingDoc.id, "Accepted");
-            });
-
-            // Create Decline button
-            const declineButton = document.createElement("button");
-            declineButton.textContent = "Decline";
-            declineButton.className = "tm-button decline-button";
-
-            declineButton.addEventListener("click", function () {
-                updateBookingStatus(bookingDoc.id, "Declined");
-            });
-
-            // Add everything to the request card
-            card.appendChild(name);
-            card.appendChild(details);
-            card.appendChild(acceptButton);
-            card.appendChild(declineButton);
-
-            // Display the card on the page
-            bookingRequests.appendChild(card);
-        });
-
-    } catch (error) {
-
-        console.error("Error loading booking requests:", error);
-
-        showMessage(
-            "Unable to load booking requests. Please try again.",
-            "danger"
-        );
-    }
+// Stops text from running as HTML.
+function esc(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML.replace(/"/g, "&quot;");
 }
 
-// Update the booking request status
-async function updateBookingStatus(bookingId, newStatus) {
-
-    try {
-
-        // Find the selected booking document
-        const bookingRef = doc(db, "bookingRequests", bookingId);
-
-        // Update its status
-        await updateDoc(bookingRef, {
-            status: newStatus
-        });
-
-        showMessage(
-            `Booking request ${newStatus.toLowerCase()} successfully!`,
-            "success"
-        );
-
-        // Reload the inbox
-        await loadBookingRequests();
-
-    } catch (error) {
-
-        console.error("Error updating booking status:", error);
-
-        showMessage(
-            "Unable to update booking status. Please try again.",
-            "danger"
-        );
-    }
+function requestHtml(id, r) {
+  return `
+    <div class="border rounded-4 p-3 mb-3">
+      <h2 class="h6 fw-bold mb-2">${esc(r.studentName || "Student")}</h2>
+      <p class="mb-1 small text-secondary">${esc(r.education || "")}</p>
+      <p class="mb-1">${esc(r.studentInfo || "")}</p>
+      <p class="mb-3 small text-secondary">${esc(r.date || "No date")} ${esc(r.time || "")}</p>
+      <button type="button" class="btn btn-success rounded-pill me-2" data-id="${esc(id)}" data-action="Accepted">Accept</button>
+      <button type="button" class="btn btn-outline-danger rounded-pill" data-id="${esc(id)}" data-action="Declined">Decline</button>
+    </div>`;
 }
 
-// Load booking requests when the page opens
-loadBookingRequests();
+// Requests sent to this tutor that are still waiting for an answer
+async function loadRequests() {
+  try {
+    const snap = await getDocs(query(collection(db, "bookingRequests"), where("tutorId", "==", tutorUid)));
+    const pending = snap.docs.filter((d) => d.data().status === "Pending");
+    list.innerHTML = pending.length
+      ? pending.map((d) => requestHtml(d.id, d.data())).join("")
+      : `<p class="text-secondary">No new requests.</p>`;
+  } catch (error) {
+    console.error(error);
+    showMessage("Couldn't load requests. Please try again.", "danger");
+  }
+}
+
+// Accept or Decline: save the new status (Accept also saves a demo meeting link)
+async function setStatus(id, status) {
+  const update = { status };
+  if (status === "Accepted") update.meetingLink = `https://meet.example.com/session-${id.slice(0, 6)}`;
+  try {
+    await updateDoc(doc(db, "bookingRequests", id), update);
+    showMessage(`Request ${status.toLowerCase()}.`, "success");
+    loadRequests();
+  } catch (error) {
+    console.error(error);
+    showMessage("Couldn't update the request. Please try again.", "danger");
+  }
+}
+
+// One click listener for every Accept / Decline button
+list.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-id]");
+  if (button) setStatus(button.dataset.id, button.dataset.action);
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) return (location.href = "login.html");
+  tutorUid = user.uid;
+  loadRequests();
+});

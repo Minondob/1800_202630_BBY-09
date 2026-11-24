@@ -1,4 +1,5 @@
-import { db } from "./firebaseConfig.js";
+import { auth, db } from "./firebaseConfig.js";
+import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 // ---- Sample tutors, saved in the "users" collection like real tutors ----
@@ -25,6 +26,9 @@ const CATEGORY = {
   History: "Social Studies", Geography: "Social Studies", Economics: "Social Studies", Psychology: "Social Studies"
 };
 
+const DEFAULT_RATE = 25;
+const DEFAULT_DISTANCE_KM = 5;
+
 // ---- Filters come from the URL (search.html?subject=Math&max=50) ----
 const params = new URLSearchParams(location.search);
 const subjects = params.get("subject")?.split(",") ?? [];
@@ -36,12 +40,14 @@ const list = document.getElementById("tutorList");
 const searchInput = document.getElementById("searchInput");
 let allTutors = [];
 
-// A missing field (a real tutor who has no distance yet) never blocks a tutor.
 function matches(t) {
+  const rate = t.hourlyRate != null && t.hourlyRate !== "" ? Number(t.hourlyRate) : DEFAULT_RATE;
+  const dist = t.distanceKm != null && t.distanceKm !== "" ? Number(t.distanceKm) : DEFAULT_DISTANCE_KM;
+
   if (subjects.length && !subjects.includes(CATEGORY[t.subject])) return false;
   if (ages.length && t.ageGroups && !ages.some((a) => t.ageGroups.includes(a))) return false;
-  if (maxPrice && t.hourlyRate > maxPrice) return false;
-  if (maxDist && t.distanceKm > maxDist) return false;
+  if (maxPrice && rate > maxPrice) return false;
+  if (maxDist && dist > maxDist) return false;
   return true;
 }
 
@@ -70,18 +76,22 @@ function avatarHtml(t) {
 }
 
 function cardHtml(t) {
-  const rating = t.rating
-    ? `<span class="tutor-rating"><span class="star" aria-hidden="true">&#9733;</span> ${Number(t.rating).toFixed(1)}</span>`
-    : "";
-  const price = t.hourlyRate ? `$${t.hourlyRate}/hr` : "";
-  const dist = t.distanceKm ? `${t.distanceKm} km away` : "";
+  const ratingValue = t.rating != null && t.rating !== "" ? Number(t.rating).toFixed(1) : "New";
+  const rating = `<span class="tutor-rating"><span class="star" aria-hidden="true">&#9733;</span> ${esc(ratingValue)}</span>`;
+
+  const rate = t.hourlyRate != null && t.hourlyRate !== "" ? Number(t.hourlyRate) : DEFAULT_RATE;
+  const dist = t.distanceKm != null && t.distanceKm !== "" ? Number(t.distanceKm) : DEFAULT_DISTANCE_KM;
+
+  const price = `$${esc(rate)}/hr`;
+  const distText = `${esc(dist)} km away`;
+
   return `
     <a class="tutor-card" href="viewprofile.html?id=${encodeURIComponent(t.id)}">
       ${avatarHtml(t)}
       <div class="tutor-info">
         <div class="tutor-top"><h2 class="tutor-name">${esc(nameOf(t))}</h2>${rating}</div>
         <div class="tutor-tags"><span class="tag">${esc(t.subject)}</span></div>
-        <div class="tutor-meta"><span class="tutor-price">${price}</span><span>${dist}</span></div>
+        <div class="tutor-meta"><span class="tutor-price">${price}</span><span>${distText}</span></div>
       </div>
     </a>`;
 }
@@ -142,13 +152,18 @@ async function seedTutors() {
 showActiveFilters();
 searchInput.addEventListener("input", render);
 
-if (params.get("seed") === "1") {
-  seedTutors()
-    .then(() => location.replace("search.html"))
-    .catch((error) => {
-      console.error(error);
-      list.textContent = "Couldn't write the sample tutors. Check the console.";
-    });
-} else {
-  loadTutors();
-}
+// Only logged-in users can see tutors
+onAuthStateChanged(auth, (user) => {
+  if (!user) return (location.href = "login.html");
+
+  if (params.get("seed") === "1") {
+    seedTutors()
+      .then(() => location.replace("search.html"))
+      .catch((error) => {
+        console.error(error);
+        list.textContent = "Couldn't write the sample tutors. Check the console.";
+      });
+  } else {
+    loadTutors();
+  }
+});
