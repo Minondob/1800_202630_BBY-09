@@ -6,7 +6,7 @@ onAuthStateChanged(auth, async (user) => {
   if (!user) return (location.href = "login.html");
 
   const snap = await getDoc(doc(db, "users", user.uid));
-  if (!snap.exists()) return (location.href = "role.html");
+  if (!snap.exists()) return (location.href = "main.html");
   const data = snap.data();
   if (!data.profileComplete) return (location.href = "profile.html");
 
