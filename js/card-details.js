@@ -2,6 +2,12 @@
 import { db } from "./firebaseConfig.js";
 import { collection, addDoc } from "firebase/firestore";
 
+// Get the booking ID from the Cardpay URL
+const params = new URLSearchParams(window.location.search);
+const bookingId = params.get("bookingId");
+
+console.log("Booking ID on Cardpay:", bookingId);
+
 // Get the card details form
 const form = document.getElementById("cardDetailsForm");
 
@@ -12,6 +18,12 @@ if (!form) {
     form.addEventListener("submit", async function (event) {
 
         event.preventDefault();
+
+        // Check whether the booking ID exists
+        if (!bookingId) {
+            alert("Booking ID is missing. Please return to your booking.");
+            return;
+        }
 
         // Get cardholder information
         const cardholderName = document
@@ -30,22 +42,24 @@ if (!form) {
 
         try {
 
-            // Save payment record to Firestore
+            // Save mock payment record to Firestore
             const paymentRef = await addDoc(
                 collection(db, "Payments"),
                 {
                     cardholderName: cardholderName,
                     lastFourDigits: cardNumber.slice(-4),
                     paymentMethod: "card",
-                    status: "pending"
+                    status: "paid"
                 }
             );
 
             console.log("Payment saved:", paymentRef.id);
 
-            alert("Payment information saved successfully!");
+            alert("Mock payment successful!");
 
-            form.reset();
+            // Move to the connection page and preserve booking ID
+            window.location.href =
+                `connection.html?bookingId=${encodeURIComponent(bookingId)}`;
 
         } catch (error) {
 

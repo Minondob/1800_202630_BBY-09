@@ -1,74 +1,177 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutor Match - Booking Request</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tutor Match - Booking Request</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css"
+          rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Shared CSS -->
+    <link href="css/style.css" rel="stylesheet">
 </head>
+
 <body>
+
 <div class="phone">
-  <header class="phone-header">Tutor Match</header>
-  <main class="phone-main">
-    <h1 class="h4 mb-3">Student Booking Request</h1>
 
-    <form id="tm-booking-form" class="mb-4">
-      <div class="mb-3">
-        <label for="tm-student-info" class="form-label fw-semibold">What do you need help with?</label>
-        <textarea class="form-control" id="tm-student-info" rows="4"
-          placeholder="Describe the subject or topics you need help with..." required></textarea>
-      </div>
+    <!-- Top Header -->
+    <header class="phone-header">
+        Tutor Match
+    </header>
 
-      <div class="mb-3">
-        <label for="tm-education" class="form-label fw-semibold">Education Level</label>
-        <select class="form-select" id="tm-education" required>
-          <option value="" selected disabled>Select your education level</option>
-          <option value="Elementary">Elementary</option>
-          <option value="Middle School">Middle School</option>
-          <option value="High School">High School</option>
-          <option value="College">College</option>
-          <option value="University">University</option>
-        </select>
-      </div>
+    <!-- Main Booking Content -->
+    <main class="phone-main">
 
-      <div class="mb-3">
-        <label for="tm-student-name" class="form-label fw-semibold">Student Name</label>
-        <input type="text" class="form-control" id="tm-student-name" placeholder="Enter your name" required>
-      </div>
+        <h1 class="h4 mb-3">Student Booking Request</h1>
 
-      <div class="mb-3">
-        <label for="tm-student-email" class="form-label fw-semibold">Email Address</label>
-        <input type="email" class="form-control" id="tm-student-email" placeholder="Enter your email address" required>
-      </div>
+        <form id="tm-booking-form" class="mb-4">
 
-      <div class="row g-2 mb-3">
-        <div class="col-6">
-          <label for="booking-date" class="form-label fw-semibold">Date</label>
-          <input type="date" class="form-control" id="booking-date">
-        </div>
-        <div class="col-6">
-          <label for="booking-time" class="form-label fw-semibold">Time</label>
-          <input type="time" class="form-control" id="booking-time">
-        </div>
-      </div>
+            <!-- Student Information -->
+            <div class="mb-3">
+                <label for="tm-student-info" class="form-label fw-semibold">
+                    What do you need help with?
+                </label>
 
-      <div id="booking-message" class="mb-3"></div>
-      <button type="submit" class="btn btn-tm w-100">Submit Booking Request</button>
-    </form>
+                <textarea
+                    class="form-control"
+                    id="tm-student-info"
+                    rows="4"
+                    placeholder="Describe the subject or topics you need help with..."
+                    required
+                ></textarea>
+            </div>
 
-    <section class="mt-4">
-      <h2 class="h6 fw-bold mb-2">Your Booking History</h2>
-      <div id="past-requests">
-        <p class="text-secondary small mb-0">You haven't made any booking requests yet.</p>
-      </div>
-    </section>
-  </main>
-  <div id="navbar-placeholder"></div>
+            <!-- Education Level -->
+            <div class="mb-3">
+                <label for="tm-education" class="form-label fw-semibold">
+                    Education Level
+                </label>
+
+                <select class="form-select" id="tm-education" required>
+
+                    <option value="" selected disabled>
+                        Select your education level
+                    </option>
+
+                    <option value="Elementary">Elementary</option>
+                    <option value="Middle School">Middle School</option>
+                    <option value="High School">High School</option>
+                    <option value="College">College</option>
+                    <option value="University">University</option>
+
+                </select>
+            </div>
+
+            <!-- Student Name -->
+            <div class="mb-3">
+                <label for="tm-student-name" class="form-label fw-semibold">
+                    Student Name
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="tm-student-name"
+                    placeholder="Enter your name"
+                    required
+                >
+            </div>
+
+            <!-- Student Email -->
+            <div class="mb-3">
+                <label for="tm-student-email" class="form-label fw-semibold">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    class="form-control"
+                    id="tm-student-email"
+                    placeholder="Enter your email address"
+                    required
+                >
+            </div>
+
+            <!-- Booking Date and Time -->
+            <div class="row g-2 mb-3">
+
+                <div class="col-6">
+                    <label for="booking-date" class="form-label fw-semibold">
+                        Date
+                    </label>
+
+                    <input
+                        type="date"
+                        class="form-control"
+                        id="booking-date"
+                        required
+                    >
+                </div>
+
+                <div class="col-6">
+                    <label for="booking-time" class="form-label fw-semibold">
+                        Time
+                    </label>
+
+                    <input
+                        type="time"
+                        class="form-control"
+                        id="booking-time"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <!-- Booking Message -->
+            <div id="booking-message" class="mb-3"></div>
+
+            <!-- Submit Booking -->
+            <button type="submit" class="btn btn-tm w-100">
+                Submit Booking Request
+            </button>
+
+        </form>
+
+        <!-- Booking History -->
+        <section class="mt-4">
+
+            <h2 class="h6 fw-bold mb-2">
+                Your Booking History
+            </h2>
+
+            <div id="past-requests">
+                <p class="text-secondary small mb-0">
+                    You haven't made any booking requests yet.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <div id="navbar-placeholder"></div>
+
 </div>
+
+<!-- JavaScript -->
 <script type="module" src="/js/booking.js"></script>
 <script type="module" src="/js/navbar.js"></script>
+
 </body>
 </html>
