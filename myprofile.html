@@ -13,13 +13,25 @@
       <img id="avatar" class="avatar mb-3" alt="Your avatar">
       <h1 class="h4 mb-1" id="username"></h1>
       <p class="text-secondary mb-3" id="role"></p>
+      <p class="fw-bold d-none" id="rate"></p>
       <p class="text-start" id="bio"></p>
       <p class="text-secondary small" id="email"></p>
       <a href="profile.html" class="btn btn-outline-primary rounded-pill w-100 mb-2">Edit profile</a>
       <button id="logoutBtn" type="button" class="btn btn-tm w-100">Log out</button>
+      <button id="deleteBtn" type="button" class="btn btn-outline-danger rounded-pill w-100 mt-3">Delete account</button>
+      <div id="deletePanel" class="alert alert-danger text-start mt-3 d-none" role="alertdialog" aria-labelledby="deleteTitle">
+        <p id="deleteTitle" class="fw-bold mb-1">Delete your account?</p>
+        <p class="small">This permanently removes your profile and your booking requests. It can't be undone.</p>
+        <label class="form-label small" for="deletePassword">Enter your password to confirm</label>
+        <input id="deletePassword" type="password" class="form-control mb-2" autocomplete="current-password">
+        <p id="deleteError" class="small text-danger d-none" role="alert"></p>
+        <button id="confirmDeleteBtn" type="button" class="btn btn-danger rounded-pill w-100 mb-2">Yes, delete my account</button>
+        <button id="cancelDeleteBtn" type="button" class="btn btn-outline-secondary rounded-pill w-100">Cancel</button>
+      </div>
     </section>
   </main>
   <div id="navbar-placeholder"></div>
 </div>
 <script type="module" src="js/myprofile.js"></script>
+<script type="module" src="/js/navbar.js"></script>
 </body></html>

@@ -26,8 +26,6 @@ function resizeImage(file) {
 }
 
 onAuthStateChanged(auth, async (user) => {
-  // FINAL: UNCOMMENT THE NEXT LINE TO SEND LOGGED-OUT USERS TO THE LOGIN PAGE, AND DELETE THE "TESTING ONLY" LINE UNDER IT.
-  // if (!user) return (location.href = "login.html");
   if (!user) return (location.href = "login.html"); 
 
   const ref = doc(db, "users", user.uid);
@@ -49,8 +47,11 @@ onAuthStateChanged(auth, async (user) => {
   // Subject picker (tutors only)
   const subjectSelect = document.getElementById("subjectSelect");
   const subjectOther = document.getElementById("subjectOther");
+  const rateInput = document.getElementById("rateInput");
   if (isTutor) {
     document.getElementById("subjectBlock").classList.remove("d-none");
+    document.getElementById("rateBlock").classList.remove("d-none");
+    document.getElementById("ageBlock").classList.remove("d-none");
     subjectSelect.innerHTML = `<option value="" disabled selected>Select a subject</option>`
       + SUBJECTS.map((s) => `<option>${s}</option>`).join("")
       + `<option value="__other">Other (type your own)</option>`;
@@ -58,6 +59,11 @@ onAuthStateChanged(auth, async (user) => {
       if (SUBJECTS.includes(data.subject)) subjectSelect.value = data.subject;
       else { subjectSelect.value = "__other"; subjectOther.value = data.subject; subjectOther.classList.remove("d-none"); }
     }
+    if (data.hourlyRate) rateInput.value = data.hourlyRate;
+    (data.ageGroups || []).forEach((g) => {
+      const box = document.querySelector(`input[name=ageGroup][value="${g}"]`);
+      if (box) box.checked = true;
+    });
     subjectSelect.addEventListener("change", () =>
       subjectOther.classList.toggle("d-none", subjectSelect.value !== "__other"));
   }
@@ -83,11 +89,19 @@ onAuthStateChanged(auth, async (user) => {
     if (isTutor) {
       const subject = subjectSelect.value === "__other" ? subjectOther.value.trim() : subjectSelect.value;
       if (!subject) return showError("Please choose the subject you teach.");
+      const rate = Number(rateInput.value);
+      if (!Number.isFinite(rate) || rate < 1 || rate > 500) return showError("Enter your hourly rate, between $1 and $500.");
+      const ageGroups = [...document.querySelectorAll("input[name=ageGroup]:checked")].map((b) => b.value);
+      if (!ageGroups.length) return showError("Choose at least one age group you teach.");
       update.subject = subject;
+      update.hourlyRate = Math.round(rate);
+      update.ageGroups = ageGroups;
     }
     if (avatarData) update.avatar = avatarData;
     try {
       await updateDoc(ref, update);
+      // Students go find a tutor; tutors go to their inbox.
+      if (isTutor) { const next = document.getElementById("nextBtn"); next.textContent = "Go to inbox"; next.href = "inbox.html"; }
       document.getElementById("profileSection").classList.add("d-none");
       document.getElementById("thanks").classList.remove("d-none");
     } catch (err) {

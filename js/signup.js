@@ -2,7 +2,6 @@ import { auth, db } from "./firebaseConfig.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
-// TESTING FALLBACK: DEFAULTS TO STUDENT SO signup.html OPENS DIRECTLY. 
 const role = sessionStorage.getItem("role");
 if (!role) location.href = "main.html";
 

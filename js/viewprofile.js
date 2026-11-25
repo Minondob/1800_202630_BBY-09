@@ -23,6 +23,17 @@ async function loadTutor() {
     document.getElementById("subject").textContent = t.subject;
     if (t.avatar) document.getElementById("avatar").src = t.avatar;
 
+    if (t.hourlyRate) {
+      const rate = document.getElementById("rate");
+      rate.textContent = `$${t.hourlyRate}/hr`;
+      rate.classList.remove("d-none");
+    }
+    if (t.ageGroups?.length) {
+      const ages = document.getElementById("ages");
+      ages.textContent = `Age groups: ${t.ageGroups.join(", ")}`;
+      ages.classList.remove("d-none");
+    }
+
     // No rating data exists yet, so this shows 0 stars until a "rating" field is added.
     const rating = Math.round(Number(t.rating) || 0);
     document.getElementById("stars").replaceChildren(...Array.from({ length: 5 }, (_, i) => {
