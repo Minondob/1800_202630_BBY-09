@@ -1,7 +1,7 @@
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-// If you have custom global styles, import them as well:
 import '../css/style.css';
 
 function sayHello() {

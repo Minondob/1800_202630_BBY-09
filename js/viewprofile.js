@@ -5,10 +5,6 @@ import { doc, getDoc } from "firebase/firestore";
 const status = document.getElementById("status");
 const tutorId = new URLSearchParams(location.search).get("id");
 
-// Message button is a placeholder for now.
-document.querySelectorAll("[data-message]").forEach((b) =>
-  b.addEventListener("click", () => console.log("Message tutor clicked:", tutorId)));
-
 async function loadTutor() {
   if (!tutorId) return showStatus("No tutor selected.");
   try {
@@ -21,7 +17,18 @@ async function loadTutor() {
     document.getElementById("name").textContent = t.username || `${t.firstName} ${t.lastName}`;
     document.getElementById("bio").textContent = t.bio || "No details yet.";
     document.getElementById("subject").textContent = t.subject;
-    if (t.avatar) document.getElementById("avatar").src = t.avatar;
+    const avatar = document.getElementById("avatar");
+    if (t.avatar) {
+    avatar.src = t.avatar;
+    } else {
+      
+    const circle = document.createElement("div");
+    circle.id = "avatar";
+    circle.className = "avatar d-flex align-items-center justify-content-center mx-auto";
+    circle.style.cssText = "background:#2f5bea;color:#fff;font-size:3rem;font-weight:800";
+    circle.textContent = `${t.firstName?.[0] ?? ""}${t.lastName?.[0] ?? ""}`.toUpperCase();
+    avatar.replaceWith(circle);
+    }
 
     if (t.hourlyRate) {
       const rate = document.getElementById("rate");

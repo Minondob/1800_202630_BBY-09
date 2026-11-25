@@ -47,7 +47,5 @@ async function loadTutors() {
 }
 
 onAuthStateChanged(auth, () => {
-  // FINAL: UNCOMMENT THE NEXT LINE TO REQUIRE LOGIN (ALSO ADD "user" AS THE PARAMETER ABOVE). LEAVE COMMENTED WHILE TESTING.
-  // if (!user) return (location.href = "login.html");
   loadTutors();
 });
