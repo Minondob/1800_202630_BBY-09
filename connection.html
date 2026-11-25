@@ -6,46 +6,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Connect with Tutor | TutorMatch</title>
+    <title>TutorMatch - Connection</title>
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <!-- Shared TutorMatch CSS -->
+    <link rel="stylesheet" href="css/style.css">
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
 
     <style>
-        body {
-            background-color: #f5f7fb;
-            font-family: Arial, sans-serif;
-        }
+        /* Connection page styling */
 
         .connection-container {
-            max-width: 650px;
-            margin: 80px auto;
             padding: 20px;
         }
 
-        .connection-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 40px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        .connection-title {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        .success-icon {
-            font-size: 65px;
-            color: #198754;
+        .connection-description {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 25px;
         }
+
+        /* Booking information */
+
+        .booking-info {
+            background-color: #f8f9fa;
+            border: 1px solid #e3e8f2;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 25px;
+        }
+
+        .booking-info h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .booking-detail {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .booking-detail:last-child {
+            margin-bottom: 0;
+        }
+
+        .booking-detail i {
+            color: #0d6efd;
+            font-size: 20px;
+        }
+
+        .booking-detail p {
+            margin: 0;
+        }
+
+        /* Connection options */
 
         .connection-option {
-            border: 1px solid #dee2e6;
+            background-color: #ffffff;
+            border: 1px solid #e3e8f2;
             border-radius: 12px;
-            padding: 25px;
+            padding: 22px;
+            margin-bottom: 20px;
+            text-align: center;
             transition: 0.3s;
-            height: 100%;
         }
 
         .connection-option:hover {
@@ -56,110 +91,160 @@
         .option-icon {
             font-size: 40px;
             color: #0d6efd;
+            margin-bottom: 10px;
+        }
+
+        .connection-option h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .connection-option p {
+            color: #6c757d;
+            margin-bottom: 18px;
         }
 
         .connect-btn {
             width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Phone call section */
+
+        .phone-call-note {
+            background-color: #eef5ff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #495057;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container connection-container">
+    <div class="phone">
 
-        <div class="connection-card text-center">
+        <!-- Header -->
+        <header class="phone-header">
+            TutorMatch
+        </header>
 
-            <!-- Booking Accepted Message -->
-            <div class="mb-3">
-                <i class="bi bi-check-circle-fill success-icon"></i>
-            </div>
+        <!-- Main Content -->
+        <main class="phone-main">
 
-            <h2 class="fw-bold mb-3">Booking Request Accepted!</h2>
+            <div class="connection-container">
 
-            <p class="text-muted mb-4">
-                Your booking request has been accepted.
-                You can now choose how you would like to connect
-                for your tutoring session.
-            </p>
+                <h2 class="connection-title">
+                    Your Tutoring Session
+                </h2>
 
-            <hr class="my-4">
+                <p class="connection-description">
+                    Your booking has been accepted.
+                    Choose how you would like to connect with your tutor.
+                </p>
 
-            <h4 class="fw-semibold mb-4">
-                Choose Your Connection Method
-            </h4>
+                <!-- Booking Date and Time -->
+                <section class="booking-info">
 
-            <div class="row g-3">
+                    <h3>Booking Details</h3>
 
-                <!-- Zoom Option -->
-                <div class="col-md-6">
+                    <div class="booking-detail">
+                        <i class="bi bi-calendar-event"></i>
 
-                    <div class="connection-option">
-
-                        <i class="bi bi-camera-video-fill option-icon"></i>
-
-                        <h5 class="fw-bold mt-3">Zoom Meeting</h5>
-
-                        <p class="text-muted small">
-                            Join your tutoring session through Zoom.
+                        <p>
+                            <strong>Date:</strong>
+                            <span id="booking-date">
+                                Loading...
+                            </span>
                         </p>
-
-                        <button class="btn btn-primary connect-btn"
-                            id="zoomBtn" disabled>
-                            <i class="bi bi-camera-video"></i>
-                            Join Zoom
-                        </button>
-
                     </div>
 
-                </div>
+                    <div class="booking-detail">
+                        <i class="bi bi-clock"></i>
 
-                <!-- Phone Call Option -->
-                <div class="col-md-6">
-
-                    <div class="connection-option">
-
-                        <i class="bi bi-telephone-fill option-icon"></i>
-
-                        <h5 class="fw-bold mt-3">Phone Call</h5>
-
-                        <p class="text-muted small">
-                            Connect with your tutor through a phone call.
+                        <p>
+                            <strong>Time:</strong>
+                            <span id="booking-time">
+                                Loading...
+                            </span>
                         </p>
-
-                        <button class="btn btn-outline-primary connect-btn"
-                            id="callBtn" disabled>
-                            <i class="bi bi-telephone"></i>
-                            Start Call
-                        </button>
-
                     </div>
 
+                </section>
+
+                <!-- Zoom Connection -->
+                <section class="connection-option">
+
+                    <div class="option-icon">
+                        <i class="bi bi-camera-video"></i>
+                    </div>
+
+                    <h3>Connect through Zoom</h3>
+
+                    <p>
+                        Join your tutoring session using the Zoom meeting link.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="zoomBtn"
+                        class="btn btn-primary connect-btn"
+                        disabled
+                    >
+                        <i class="bi bi-camera-video"></i>
+                        Join Zoom Meeting
+                    </button>
+
+                </section>
+
+                <!-- Phone Call Connection -->
+                <section class="connection-option">
+
+                    <div class="option-icon">
+                        <i class="bi bi-telephone"></i>
+                    </div>
+
+                    <h3>Call by Phone</h3>
+
+                    <p>
+                        You can connect with your tutor through a phone call.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="callBtn"
+                        class="btn btn-outline-primary connect-btn"
+                        disabled
+                    >
+                        <i class="bi bi-telephone"></i>
+                        Call Tutor
+                    </button>
+
+                </section>
+
+                <div class="phone-call-note">
+                    <i class="bi bi-info-circle"></i>
+                    Your connection details will be available
+                    once they are provided for your booking.
                 </div>
 
             </div>
 
-            <!-- Information -->
-            <div class="alert alert-info mt-4 mb-0">
+        </main>
 
-                <i class="bi bi-info-circle"></i>
-
-                Connection details will become available
-                once they have been provided for your session.
-
-            </div>
-
-        </div>
-
-        <p class="text-center text-muted mt-4 small">
-            © 2026 TutorMatch. All rights reserved.
-        </p>
+        <!-- Bottom Navigation -->
+        <div id="navbar-placeholder"></div>
 
     </div>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
-    </script>
+    <!-- JavaScript -->
+    <script type="module" src="/js/connection.js"></script>
+    <script type="module" src="/js/navbar.js"></script>
 
 </body>
 </html>
