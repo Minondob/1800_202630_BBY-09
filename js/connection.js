@@ -1,42 +1,82 @@
 
-// Get the Zoom and Call buttons from HTML
+import { db } from "./firebaseConfig.js";
+import { doc, getDoc } from "firebase/firestore";
+
+console.log("Connection.js is running");
+
+// HTML elements
 const zoomBtn = document.getElementById("zoomBtn");
 const callBtn = document.getElementById("callBtn");
 
-// Get the connection information message
-const infoMessage = document.querySelector(".alert-info");
+const infoMessage = document.querySelector(".phone-call-note");
 
-// Example connection details
-// These will be replaced with actual meeting details later.
-const meetingLink = "";
-const phoneLink = "";
+const bookingDateElement = document.getElementById("booking-date");
+const bookingTimeElement = document.getElementById("booking-time");
 
-// Check if a Zoom link exists
-if (meetingLink !== "") {
+// Get booking ID from URL
+const params = new URLSearchParams(window.location.search);
+const bookingId = params.get("bookingId");
 
-    zoomBtn.disabled = false;
+console.log("Booking ID:", bookingId);
 
-    zoomBtn.addEventListener("click", function() {
-        window.open(meetingLink, "_blank");
-    });
+async function loadConnectionDetails() {
+    try {
+        // Check whether booking ID exists
+        if (!bookingId) {
+            infoMessage.textContent =
+                "Booking ID is missing from the URL.";
 
+            console.error("No booking ID found in URL.");
+            return;
+        }
+
+        // Retrieve booking document from Firestore
+        const bookingRef = doc(db, "bookingRequests", bookingId);
+        const bookingSnap = await getDoc(bookingRef);
+
+        console.log("Document exists:", bookingSnap.exists());
+
+        // Check whether document exists
+        if (!bookingSnap.exists()) {
+            infoMessage.textContent =
+                "Booking request not found in Firestore.";
+
+            console.error("Booking document was not found.");
+            return;
+        }
+
+        // Get booking data
+        const booking = bookingSnap.data();
+
+        console.log("Booking data:", booking);
+
+        // Display date and time
+        bookingDateElement.textContent =
+            booking.date || "Date not available";
+
+        bookingTimeElement.textContent =
+            booking.time || "Time not available";
+
+        // Get meeting link from Firestore
+        const meetingLink = booking.meetingLink || "";
+
+        if (meetingLink) {
+            zoomBtn.disabled = false;
+
+            zoomBtn.addEventListener("click", function () {
+                window.open(meetingLink, "_blank");
+            });
+        }
+
+        infoMessage.textContent =
+            "Your booking details have been loaded.";
+
+    } catch (error) {
+        console.error("Error loading booking:", error);
+
+        infoMessage.textContent =
+            "Unable to load booking details. Check the console.";
+    }
 }
 
-// Check if a phone connection link exists
-if (phoneLink !== "") {
-
-    callBtn.disabled = false;
-
-    callBtn.addEventListener("click", function() {
-        window.location.href = phoneLink;
-    });
-
-}
-
-// Display a message if no connection details are available
-if (meetingLink === "" && phoneLink === "") {
-
-    infoMessage.textContent =
-        "Connection details are not available yet. Please wait for your session details.";
-
-}
+loadConnectionDetails();

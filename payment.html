@@ -149,7 +149,11 @@
         </form>
 
         <!-- Continue to Card Payment Page -->
-        <a href="Cardpay.html" class="btn btn-tm w-100">
+        <a
+            id="continue-payment"
+            href="Cardpay.html"
+            class="btn btn-tm w-100"
+        >
             Continue
         </a>
 
@@ -162,6 +166,24 @@
 
 <!-- JavaScript -->
 <script type="module" src="/js/navbar.js"></script>
+
+<!-- Pass booking ID to Cardpay -->
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get("bookingId");
+
+    const continueButton = document.getElementById("continue-payment");
+
+    if (bookingId) {
+        continueButton.href =
+            `Cardpay.html?bookingId=${encodeURIComponent(bookingId)}`;
+    } else {
+        continueButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            alert("Booking ID is missing.");
+        });
+    }
+</script>
 
 </body>
 </html>

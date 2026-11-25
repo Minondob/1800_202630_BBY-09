@@ -1,21 +1,19 @@
 
-import { db } from "./firebaseConfig.js";
+import { auth, db } from "./firebaseConfig.js";
+import { onAuthStateChanged } from "firebase/auth";
 import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    serverTimestamp
 } from "firebase/firestore";
 
-// Get the booking form and page elements
-const bookingForm = document.getElementById("tm-booking-form");
-const bookingFormSection = document.getElementById("booking-form-section");
-const requestStatusSection = document.getElementById("request-status-section");
-const messageBox = document.getElementById("booking-message");
+const form = document.getElementById("tm-booking-form");
+const message = document.getElementById("booking-message");
 const pastRequests = document.getElementById("past-requests");
 
-// Get the booking form fields
 const studentInfo = document.getElementById("tm-student-info");
 const education = document.getElementById("tm-education");
 const studentName = document.getElementById("tm-student-name");
@@ -23,226 +21,175 @@ const studentEmail = document.getElementById("tm-student-email");
 const bookingDate = document.getElementById("booking-date");
 const bookingTime = document.getElementById("booking-time");
 
-// Display messages
-function showMessage(message, type) {
-  messageBox.textContent = message;
-  messageBox.className = `alert alert-${type}`;
-}
-
-// Load previous booking requests from Firestore
-async function loadPastRequests(email) {
-  try {
-    const bookingRef = collection(db, "bookingRequests");
-
-    const q = query(
-      bookingRef,
-      where("email", "==", email)
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    pastRequests.innerHTML = "";
-
-    if (querySnapshot.empty) {
-      pastRequests.textContent = "You have no previous booking requests.";
-      return;
-    }
-
-    querySnapshot.forEach((doc) => {
-      const booking = doc.data();
-
-      const card = document.createElement("div");
-      card.className = "card mb-3";
-
-      const cardBody = document.createElement("div");
-      cardBody.className = "card-body";
-
-      const name = document.createElement("h5");
-      name.textContent = booking.studentName || "Student";
-
-      const emailInfo = document.createElement("p");
-      emailInfo.textContent = `Email: ${booking.email || "Not provided"}`;
-
-      const info = document.createElement("p");
-      info.textContent = booking.studentInfo || "No learning requirements provided.";
-
-      const educationInfo = document.createElement("p");
-      educationInfo.textContent = `Education: ${booking.education || "Not provided"}`;
-
-      const date = document.createElement("p");
-      date.textContent = `Date: ${booking.date || "Not provided"}`;
-
-      const time = document.createElement("p");
-      time.textContent = `Time: ${booking.time || "Not provided"}`;
-
-      const status = document.createElement("p");
-      status.textContent = `Status: ${booking.status || "Pending"}`;
-
-      cardBody.appendChild(name);
-      cardBody.appendChild(emailInfo);
-      cardBody.appendChild(info);
-      cardBody.appendChild(educationInfo);
-      cardBody.appendChild(date);
-      cardBody.appendChild(time);
-      cardBody.appendChild(status);
-
-      // Display confirmation link if booking is accepted
-      if (booking.status === "Accepted") {
-
-        const confirmationLink = document.createElement("a");
-
-        confirmationLink.textContent = "View Confirmation";
-        confirmationLink.href = `booking-confirmation.html?id=${doc.id}`;
-        confirmationLink.className = "btn btn-success mt-2";
-
-        cardBody.appendChild(confirmationLink);
-      }
-
-      card.appendChild(cardBody);
-      pastRequests.appendChild(card);
-    });
-
-  } catch (error) {
-    console.error("Error loading booking requests:", error);
-    pastRequests.textContent = "Unable to load booking history.";
-  }
-}
-
-// Load booking history when an email is entered
-studentEmail.addEventListener("change", () => {
-  const email = studentEmail.value.trim();
-
-  if (email) {
-    loadPastRequests(email);
-  }
-});
-
-// Submit booking request
-bookingForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  // Collect information from the booking form
-  const bookingData = {
-    studentInfo: studentInfo.value.trim(),
-    education: education.value,
-    studentName: studentName.value.trim(),
-    email: studentEmail.value.trim(),
-    date: bookingDate.value,
-    time: bookingTime.value,
-    status: "Pending"
-  };
-
-  try {
-    // Save the booking request to Firestore
-    await addDoc(collection(db, "bookingRequests"), bookingData);
-
-    // Refresh the booking history
-    await loadPastRequests(bookingData.email);
-
-    // Hide the booking form
-    bookingFormSection.hidden = true;
-
-    // Show the Request Status screen
-    requestStatusSection.hidden = false;
-
-  } catch (error) {
-    console.error("Error submitting booking request:", error);
-
-    showMessage(
-      "Something went wrong. Please try again.",
-      "danger"
-    );
-  }
-});
-import { auth, db } from "./firebaseConfig.js";; // must export both auth and db
-import { onAuthStateChanged } from "firebase/auth";
-import { collection, addDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
-
-const bookingForm = document.getElementById("tm-booking-form");
-const messageBox = document.getElementById("booking-message");
-const pastList = document.getElementById("past-requests");
 let currentUser = null;
 
-function showMessage(type, text) {
-  const div = document.createElement("div");
-  div.className = `alert alert-${type}`;
-  div.textContent = text;
-  messageBox.replaceChildren(div);
+// Read the selected tutor's ID from the URL
+const params = new URLSearchParams(window.location.search);
+const tutorId = params.get("tutor");
+
+// Display messages
+function showMessage(text, type = "info") {
+    message.textContent = text;
+    message.className = `alert alert-${type}`;
 }
 
-// READ: this student's previous booking requests
+// Load the student's past booking requests
 async function loadPastRequests(user) {
-  if (!pastList) return;
-  try {
-    // where() only, no orderBy: avoids needing a Firestore composite index. Sorted below.
-    const snap = await getDocs(query(collection(db, "bookingRequests"), where("uid", "==", user.uid)));
-    if (snap.empty) {
-      pastList.textContent = "You haven't made any booking requests yet.";
-      return;
-    }
-    const requests = snap.docs
-      .map((d) => d.data())
-      .sort((a, b) => (b.createdAt?.toMillis() ?? 0) - (a.createdAt?.toMillis() ?? 0));
-
-    pastList.replaceChildren(...requests.map((r) => {
-      const card = document.createElement("div");
-      card.className = "card mb-2";
-      const body = document.createElement("div");
-      body.className = "card-body";
-      const date = r.createdAt ? r.createdAt.toDate().toLocaleDateString() : "";
-      // textContent (not innerHTML) so student-typed text can't run as HTML
-      const title = document.createElement("h3");
-      title.className = "h6";
-      title.textContent = `${r.studentName} (${r.education})`;
-      const info = document.createElement("p");
-      info.className = "mb-1";
-      info.textContent = r.studentInfo;
-      const meta = document.createElement("small");
-      meta.className = "text-secondary";
-      meta.textContent = `${date} - Status: ${r.status}`;
-      body.append(title, info, meta);
-      card.append(body);
-      return card;
-    }));
-  } catch (error) {
-    console.error("Error loading booking requests:", error);
-    pastList.textContent = "Couldn't load your past requests.";
-  }
-}
-
-// Wait for Firebase to say who is logged in
-onAuthStateChanged(auth, (user) => {
-  if (!user) return (location.href = "login.html");
-  currentUser = user;
-  loadPastRequests(user);
-});
-
-// WRITE: save a new booking request linked to the logged-in account
-if (bookingForm) {
-  bookingForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!currentUser) return showMessage("danger", "Please log in to submit a booking request.");
-
-    const studentInfo = document.getElementById("tm-student-info").value;
-    const education = document.getElementById("tm-education").value;
-    const studentName = document.getElementById("tm-student-name").value;
-
     try {
-      await addDoc(collection(db, "bookingRequests"), {
-        studentInfo,
-        education,
-        studentName,
-        uid: currentUser.uid,
-        email: currentUser.email,
-        status: "pending",
-        createdAt: serverTimestamp()
-      });
-      showMessage("success", "Booking request submitted successfully!");
-      bookingForm.reset();
-      loadPastRequests(currentUser); // refresh the list
+        const requestsQuery = query(
+            collection(db, "bookingRequests"),
+            where("uid", "==", user.uid)
+        );
+
+        const querySnapshot = await getDocs(requestsQuery);
+
+        const requests = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+
+        requests.sort((a, b) => {
+            const aTime = a.createdAt?.toMillis?.() || 0;
+            const bTime = b.createdAt?.toMillis?.() || 0;
+
+            return bTime - aTime;
+        });
+
+        pastRequests.innerHTML = requests.length
+            ? requests.map((booking) => {
+                const status = booking.status || "Pending";
+
+                let payButton = "";
+
+                if (status.toLowerCase() === "accepted") {
+                    payButton = `
+                        <a
+                            class="btn btn-primary rounded-pill mt-2"
+                            href="payment.html?bookingId=${encodeURIComponent(booking.id)}">
+                            Pay now
+                        </a>
+                    `;
+                }
+
+                return `
+                    <div class="border rounded-4 p-3 mb-3">
+                        <h3 class="h6 fw-bold">
+                            ${booking.studentName || "Booking request"}
+                        </h3>
+
+                        <p class="mb-1">
+                            Date: ${booking.date || "Not available"}
+                        </p>
+
+                        <p class="mb-1">
+                            Time: ${booking.time || "Not available"}
+                        </p>
+
+                        <p class="mb-1">
+                            Status: ${status}
+                        </p>
+
+                        ${payButton}
+                    </div>
+                `;
+            }).join("")
+            : `<p class="text-secondary">No past requests.</p>`;
+
     } catch (error) {
-      console.error("Error submitting booking:", error);
-      showMessage("danger", "Unable to submit booking. Please try again.");
+        console.error("Error loading past requests:", error);
+
+        pastRequests.textContent =
+            "Unable to load past booking requests.";
     }
-  });
 }
+
+// Submit a booking request
+if (form) {
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!currentUser) {
+            showMessage("Please log in first.", "danger");
+            return;
+        }
+
+        if (!bookingDate.value || !bookingTime.value) {
+            showMessage(
+                "Please select a booking date and time.",
+                "warning"
+            );
+            return;
+        }
+
+        if (!tutorId) {
+            showMessage(
+                "Selected tutor information is missing.",
+                "danger"
+            );
+            return;
+        }
+
+        const bookingData = {
+            studentInfo: studentInfo.value.trim(),
+            education: education.value,
+            studentName: studentName.value.trim(),
+            date: bookingDate.value,
+            time: bookingTime.value,
+            tutorId: tutorId,
+            uid: currentUser.uid,
+            email: currentUser.email,
+            status: "Pending",
+            createdAt: serverTimestamp()
+        };
+
+        try {
+            // Create the booking document in Firestore
+            const bookingRef = await addDoc(
+                collection(db, "bookingRequests"),
+                bookingData
+            );
+
+            // Firestore-generated booking document ID
+            const bookingId = bookingRef.id;
+
+            console.log("Booking created:", bookingId);
+
+            showMessage(
+                "Booking request submitted successfully!",
+                "success"
+            );
+
+            form.reset();
+
+            // Restore the student's email
+            studentEmail.value = currentUser.email || "";
+
+            // Reload past requests
+            await loadPastRequests(currentUser);
+
+        } catch (error) {
+            console.error("Error submitting booking:", error);
+
+            showMessage(
+                "Unable to submit booking request.",
+                "danger"
+            );
+        }
+    });
+}
+
+// Check student authentication
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    currentUser = user;
+
+    if (studentEmail) {
+        studentEmail.value = user.email || "";
+    }
+
+    await loadPastRequests(user);
+});
